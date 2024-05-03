@@ -3,38 +3,40 @@
 //Inicia o armazenamento dos dados em uma sessão
 session_start();
 
-if (array_key_exists('nome', $_GET) && $_GET['nome'] != ''){
-    $tarefa = [
-        'nome' => $_GET['nome'],
-        'descricao' => '',
-        'prazo' => '',
-        'prioridade' => $_GET['prioridade'],
-        'concluida' => ''];
+include "banco.php"; // busca o conector com o banco
+include "helpers.php";
 
-    //$tarefa['nome'] = $_GET['nome'];
+if (array_key_exists('nome', $_POST) && $_POST['nome'] != ''){
+    $tarefa = [];
 
-    if (array_key_exists('descricao', $_GET)){
-        $tarefa['descricao'] = $_GET['descricao'];
+    $tarefa['nome'] = $_POST['nome'];
+
+    if (array_key_exists('descricao', $_POST)){
+        $tarefa['descricao'] = $_POST['descricao'];
+    } else {
+        $tarefa['descricao'] = '';
     }
 
-    if (array_key_exists('prazo', $_GET)){
-        $tarefa['prazo'] = $_GET['prazo'];
+    if (array_key_exists('prazo', $_POST)){
+        $tarefa['prazo'] = converte_data_para_banco($_POST['prazo']);
+    } else {
+        $tarefa['prazo'] = '';
     }
 
-    //$tarefa['prioridade'] = $_GET['prioridade'];
+    $tarefa['prioridade'] = $_POST['prioridade'];
 
-    if (array_key_exists('concluida', $_GET)){
-        $tarefa['concluida'] = $_GET['concluida'];
+    if (array_key_exists('concluida', $_POST)){
+        $tarefa['concluida'] = 1;
+    } else {
+        $tarefa['concluida'] = 0;
     }
+    gravar_tarefa($conexao, $tarefa);
 
-    $_SESSION['lista_tarefa'][] = $tarefa;
+    $_SESSION['lista_tarefas'][] = $tarefa;
 }
 
-if (array_key_exists('lista_tarefa', $_SESSION)){
-    $lista_tarefas = $_SESSION['lista_tarefa'];
-} else {
-    $lista_tarefas = [];
-}
+$lista_tarefas = buscar_tarefas($conexao);
+
 
 include "template.php";
 

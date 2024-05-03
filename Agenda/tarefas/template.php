@@ -27,19 +27,19 @@
                 <legend>Prioridade:</legend>
                 <label>
                     <input type="radio" name="prioridade"
-                    value="baixa" checked >Baixa
+                    value="1" checked >Baixa
 
                     <input type="radio" name="prioridade"
-                    value="media" checked >Média
+                    value="2" checked >Média
 
                     <input type="radio" name="prioridade"
-                    value="alta" checked >Alta
+                    value="3" checked >Alta
                 </label>
             </fieldset>
             <label>
                 Tarefa Concluída:
                 <input type="checkbox" name="concluida"
-                value="sim" >
+                value="1" >
             </label>
 
             <input type="submit" value="Gravar">
@@ -48,14 +48,18 @@
     <table>
         <tr>
             <th>Tarefas</th>
+            <th>Descrição</th>
+            <th>Prazo</th>
+            <th>Prioridades</th>
+            <th>Concluída</th>
         </tr>
         <?php foreach ($lista_tarefas as $tarefa) : ?>
         <tr>
             <td><?php echo $tarefa['nome']; ?></td>
             <td><?php echo $tarefa['descricao']; ?></td>
-            <td><?php echo $tarefa['prazo']; ?></td>
-            <td><?php echo $tarefa['prioridade']; ?></td>
-            <td><?php echo $tarefa['concluida']; ?></td>
+            <td><?php echo converte_data_para_tela($tarefa['prazo']); ?></td>
+            <td><?php echo converte_prioridade($tarefa['prioridade']); ?></td>
+            <td><?php echo converte_concluida($tarefa['concluida']); ?></td>
         </tr>
         <?php endforeach; ?>
     </table>
